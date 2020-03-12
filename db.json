@@ -1,0 +1,39 @@
+{
+  "all":[
+    {
+      "menus": [
+        {
+          "title": "首页",
+          "path": "/home/workPlace",
+          "icon": "el-icon-menu"
+        },
+        {
+          "title": "菜单",
+          "icon": "el-icon-star-off",
+          "chirdMenu": [
+            {
+              "btn": "子菜单1",
+              "path": "/home/clientList"
+            }
+          ]
+        },
+        {
+          "title": "菜单2",
+          "icon": "el-icon-star-off",
+          "chirdMenu": [
+            {
+              "btn": "子菜单2",
+              "path": "/home/readyList"
+            }
+          ]
+        },
+        {
+          "title": "动态",
+          "path": "/home/dealRoute",
+          "icon": "el-icon-menu"
+        }
+      ]
+    }
+  ]
+
+}
