@@ -169,7 +169,6 @@
             }
         }
         obj.imageList = [this.form];
-        console.log(obj)
         this.http.post('/orgInfo/createOrgImageList',obj).then(res=>{
           if(res.code == 0){
             this.$message({

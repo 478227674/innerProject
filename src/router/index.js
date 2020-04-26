@@ -130,6 +130,16 @@ export default new Router({
             component: resolve =>require(['@/components/menu/download/filelist'], resolve),
             name:'资料管理'
           },
+          {
+            path:'grouporderlist',
+            component: resolve =>require(['@/components/menu/grouporder/grouporderlist'], resolve),
+            name:'拼团列表'
+          },
+          {
+            path:'refundgrouporder',
+            component: resolve =>require(['@/components/menu/grouporder/refundgrouporder'], resolve),
+            name:'拼团退款列表'
+          },
 
       ]
     }

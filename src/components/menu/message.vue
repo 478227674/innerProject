@@ -72,6 +72,9 @@
             ref="myQuillEditor"
             :options="editorOption"
           ></quill-editor>
+          <el-upload style="display:none"  :action="apiurl" :http-request="getEditorImg" :show-file-list="false"
+                     ref="uniqueId"  id="uniqueId">
+          </el-upload >
         </el-form-item>
 
         <el-form-item
@@ -170,9 +173,10 @@
   export default {
     data() {
       return {
+        apiurl:'',
         editorOption: {
           theme: "snow",
-          placeholder: "请输入教师描述...",
+          placeholder: "请输入消息详情...",
           modules: {
             toolbar: {
               container: toolbarOptions,
@@ -224,6 +228,15 @@
       this.getProductList();
     },
     methods:{
+      //编辑器图
+      getEditorImg(file){
+        this.$uploadImg(file).then(res=>{
+          if(res.code == 0){
+            let range = this.$refs.myQuillEditor.quill.getSelection();
+            this.$refs.myQuillEditor.quill.insertEmbed(range != null?range.index:0, 'image',res.data.filePath)
+          }
+        })
+      },
       //获取课程
       getProductList(){
         this.http.post('/orgInfo/queryAllProductList',{orgId:this.form.orgId,pageNum:1,pageSize:1000}).then(res=>{
@@ -233,7 +246,6 @@
         })
       },
       editMessage(data){
-        console.log(data)
         this.dialogTableVisible = true;
         this.editform.messageTitle = data.row.messageTitle;
         this.editform.messageId = data.row.messageId;
@@ -299,7 +311,6 @@
                 }
             }
         }
-        console.log(this.form)
         this.form.orgId = JSON.parse(localStorage.getItem('userinfo')).id;
         this.http.post('/orgInfo/saveOrgMessageDynamic',this.form).then(res=>{
           if(res.code == 0){

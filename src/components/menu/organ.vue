@@ -291,7 +291,6 @@
       this.http.post('/orgInfo/queryOrgInfo', {orgId:JSON.parse(localStorage.getItem('userinfo')).id}).then(res=>{
         if(res.code == 0){
           this.apiurl = this.uplodUrl + '/file/upload';
-          console.log(res.data)
           if(res.data.orgCampus){
             this.schoolList = JSON.parse(res.data.orgCampus);
           }
@@ -378,7 +377,6 @@
           this.lat = '';
           this.schoolname = '';
           this.schooladdress = '';
-          console.log(this.schoolList)
       },
       //删除校区
       handleClose(tag) {

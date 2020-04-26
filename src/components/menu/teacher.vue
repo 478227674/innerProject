@@ -323,7 +323,6 @@
         })
       },
       editTeacher(data){
-          console.log(data)
           this.editform = {
             teacherName: data.row.teacherName,
             teacherDesc:data.row.teacherDesc,
@@ -434,7 +433,6 @@
           type: 'warning',
           center: true
         }).then(async() => {
-            console.log(data)
             await this.deleteTeacher(data.row.teacherId,data.$index);
         }).catch(() => {
           this.$message({

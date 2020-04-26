@@ -68,7 +68,6 @@
       }
     },
     created(){
-        console.log(localStorage.getItem('userinfo'))
         if(localStorage.getItem('userinfo')){
           this.name = JSON.parse(localStorage.getItem('userinfo')).userName;
           this.form.id = JSON.parse(localStorage.getItem('userinfo')).id;

@@ -241,7 +241,6 @@
     },
     watch:{
       pushType(val){
-          console.log(val)
       },
     },
   }

@@ -348,7 +348,6 @@
       },
       getSalerList(){
         this.http.post('/orgInfo/queryAllSellUser',{orgId:this.orgId}).then(res=>{
-          console.log(res)
           if(res.code == 0){
             this.tableData = res.data.list;
           }

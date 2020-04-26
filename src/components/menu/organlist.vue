@@ -124,7 +124,6 @@
         this.dialogVisible = true;
       },
       getDate(val){
-          console.log(val)
       },
       formatter(row, column) {
         return row.address;

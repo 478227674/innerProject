@@ -88,7 +88,7 @@
           if(sta == 0 || sta == 1 || sta == 2){
               obj.orderStatus = sta
           }
-        this.http.post('/orgInfo/queryOrderList',obj).then(res=>{
+        this.http.post('/orgInfo/queryAllOrderList',obj).then(res=>{
           if(res.code == 0){
             this.tableData = res.data.list;
             this.total = res.data.total;

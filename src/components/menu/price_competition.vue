@@ -441,7 +441,6 @@
     },
     watch:{
       imageType(){
-          console.log(this.imageType)
       },
     },
   }

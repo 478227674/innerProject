@@ -43,7 +43,6 @@
           },
          showAbout(e){
            this.isShowAbout=true;
-           console.log(e);
          },
          hideAbout(){
            this.isShowAbout=false;

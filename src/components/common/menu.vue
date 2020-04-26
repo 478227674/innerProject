@@ -25,26 +25,26 @@
               <!--</el-menu-item>-->
             <!--</router-link>-->
           <!--</template>-->
-          <el-submenu index="109">
-            <template slot="title">
-              <i class="el-icon-document"></i>
-              <span>资料下载管理</span>
-            </template>
-            <template>
-              <router-link to="/home/filetype" >
-                <el-menu-item index="/home/filetype" >
-                  <i class="el-icon-document"></i><span slot="title">资料类型</span>
-                </el-menu-item>
-              </router-link>
-            </template>
-            <template>
-              <router-link to="/home/filelist" >
-                <el-menu-item index="/home/filelist" >
-                  <i class="el-icon-document"></i><span slot="title">资料管理</span>
-                </el-menu-item>
-              </router-link>
-            </template>
-          </el-submenu>
+<!--          <el-submenu index="109">-->
+<!--            <template slot="title">-->
+<!--              <i class="el-icon-document"></i>-->
+<!--              <span>资料下载管理</span>-->
+<!--            </template>-->
+<!--            <template>-->
+<!--              <router-link to="/home/filetype" >-->
+<!--                <el-menu-item index="/home/filetype" >-->
+<!--                  <i class="el-icon-document"></i><span slot="title">资料类型</span>-->
+<!--                </el-menu-item>-->
+<!--              </router-link>-->
+<!--            </template>-->
+<!--            <template>-->
+<!--              <router-link to="/home/filelist" >-->
+<!--                <el-menu-item index="/home/filelist" >-->
+<!--                  <i class="el-icon-document"></i><span slot="title">资料管理</span>-->
+<!--                </el-menu-item>-->
+<!--              </router-link>-->
+<!--            </template>-->
+<!--          </el-submenu>-->
           <template>
             <router-link to="/home/organ" >
               <el-menu-item index="/home/organ" >
@@ -123,6 +123,20 @@
               </el-menu-item>
             </router-link>
           </template>
+          <template>
+            <router-link to="/home/grouporderlist" >
+              <el-menu-item index="/home/grouporderlist" >
+                <i class="el-icon-tickets"></i><span slot="title">拼团订单列表</span>
+              </el-menu-item>
+            </router-link>
+          </template>
+          <template>
+            <router-link to="/home/refundgrouporder" >
+              <el-menu-item index="/home/refundgrouporder" >
+                <i class="el-icon-tickets"></i><span slot="title">拼团退款列表</span>
+              </el-menu-item>
+            </router-link>
+          </template>
           <!--<template>-->
             <!--<router-link to="/home/freelist" >-->
               <!--<el-menu-item index="/home/freelist" >-->
@@ -158,13 +172,13 @@
               </el-menu-item>
             </router-link>
           </template>
-          <template>
-            <router-link to="/home/coupon" >
-              <el-menu-item index="/home/coupon" >
-                <i class="el-icon-menu"></i><span slot="title">优惠券管理</span>
-              </el-menu-item>
-            </router-link>
-          </template>
+<!--          <template>-->
+<!--            <router-link to="/home/coupon" >-->
+<!--              <el-menu-item index="/home/coupon" >-->
+<!--                <i class="el-icon-menu"></i><span slot="title">优惠券管理</span>-->
+<!--              </el-menu-item>-->
+<!--            </router-link>-->
+<!--          </template>-->
         </el-menu>
       </el-col>
     </el-row>

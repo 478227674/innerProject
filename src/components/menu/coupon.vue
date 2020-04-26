@@ -249,19 +249,18 @@
             }
           })
         },
-//      赠送优惠券
+      //赠送优惠券
       sendCoupon(data){
           this.sendobj.couponId = data.row.couponId;
-          console.log(this.sendobj)
           this.sendFlag = true;
       },
       getCouponList(){
         this.http.post('/orgInfo/queryCouponList',{orgId:this.orgId,pageNum:1,pageSize:100}).then(res=>{
           if(res.code == 0){
-              for(var i=0;i<res.data.list.length;i++){
-                res.data.list[i].endTime = this.formatTimeToDate(res.data.list[i].endTime*1000)
-                res.data.list[i].startTime = this.formatTimeToDate(res.data.list[i].startTime*1000)
-              }
+            for(var i=0;i<res.data.list.length;i++){
+              res.data.list[i].endTime = this.formatTimeToDate(res.data.list[i].endTime)
+              res.data.list[i].startTime = this.formatTimeToDate(res.data.list[i].startTime)
+            }
             this.tableData = res.data.list;
           }
         })

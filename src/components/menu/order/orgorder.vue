@@ -113,7 +113,7 @@
       </el-tab-pane>
       <el-tab-pane label="销售订单" name="second">
         <div style="margin-bottom: 10px;">
-          <el-select v-model="choosedobj" @change="getChooseProduct" placeholder="请选择">
+          <el-select v-model="searchForm.productId" placeholder="请选择">
             <el-option
               :key="null"
               label="请选择"
@@ -181,7 +181,6 @@
             align="center">
           </el-table-column>
         </el-table>
-
         <el-pagination
           @current-change="handleCurrentChange2"
           :current-page="pagenum2"
@@ -189,7 +188,6 @@
           layout="total, prev, pager, next, jumper"
           :total="total2">
         </el-pagination>
-
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -251,13 +249,11 @@
           this.searchForm.longStartTime = new Date(st).getTime()/1000;
           this.searchForm.longEndTime = new Date(en).getTime()/1000;
         }
-        if(this.choosedobj){
-          for(var i=0;i<this.searchChoose.length;i++){
-            if(this.choosedobj == this.searchChoose[i].createTime){
-                this.searchForm.productId = this.searchChoose[i].productId;
-                this.searchForm.productType = this.searchChoose[i].productType;
-              }
-          }
+        for(var i=0;i<this.searchChoose.length;i++){
+          if(this.searchForm.createTime == this.searchChoose[i].createTime){
+              this.searchForm.productId = this.searchChoose[i].productId;
+              this.searchForm.productType = this.searchChoose[i].productType;
+            }
         }
         this.getList2();
       },
