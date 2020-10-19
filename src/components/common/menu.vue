@@ -145,6 +145,13 @@
             <!--</router-link>-->
           <!--</template>-->
           <template>
+            <router-link to="/home/videos" >
+              <el-menu-item index="/home/videos" >
+                <i class="el-icon-remove-outline"></i><span slot="title">阶段管理</span>
+              </el-menu-item>
+            </router-link>
+          </template>
+          <template>
             <router-link to="/home/recomtoindex" >
               <el-menu-item index="/home/recomtoindex" >
                 <i class="el-icon-tickets"></i><span slot="title">推荐管理</span>
@@ -186,7 +193,6 @@
 </template>
 
 <script>
-  import ajaxHelper from "@/api/ajax-helper.js";
   export default {
     data() {
       return {
@@ -195,18 +201,9 @@
       };
     },
     methods: {
-      getMenuData() {
-        ajaxHelper.get("api/all").then(
-          res => {
-            this.menus = res[0].menus;
-          },
-          err => {
-          }
-        );
-      }
+
     },
     created() {
-      this.getMenuData();
     }
   };
 </script>

@@ -6,6 +6,10 @@
     <el-button @click="pushFlag = true" style="float: left;margin-bottom: 10px;" icon="el-icon-circle-plus-outline">
       推送优惠券
     </el-button>
+    <el-button @click="messageFlag = true" style="float: left;margin-bottom: 10px;" icon="el-icon-circle-plus-outline">
+      短信通知
+    </el-button>
+
     <el-dialog title="推送消息至用户" :visible.sync="dialogFormVisible">
       <el-form :model="form">
         <el-form-item
@@ -67,7 +71,7 @@
         <!--:value="item.userId">-->
         <!--</el-option>-->
         <!--</el-select>-->
-        </el-form-item>
+<!--        </el-form-item>-->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -117,11 +121,35 @@
             </el-option>
           </el-select>
         </el-form-item>
-        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="pushFlag = false">取 消</el-button>
         <el-button type="primary" @click="sendCouponToUser">确 定</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog title="短信推送" :visible.sync="messageFlag">
+      <el-form :model="form">
+        <el-form-item
+          label="选择课程"
+          prop="date"
+          :label-width="formLabelWidth"
+        >
+          <el-select
+            v-model="pushMsgObj.productId"
+            style="margin-left: 20px;"
+            placeholder="请选择">
+            <el-option
+              v-for="item in liveList"
+              :key="item.productId"
+              :label="item.productName"
+              :value="item.productId">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="messageFlag = false">取 消</el-button>
+        <el-button type="primary" @click="sendMessageToLiveUser()">确 定</el-button>
       </div>
     </el-dialog>
     <!--dialog删除-->
@@ -132,6 +160,7 @@
   export default {
     data() {
       return {
+        messageFlag:false,
         currentPage:1,//当前页数
         dialogTableVisible: false,
         dialogFormVisible: false,
@@ -154,13 +183,43 @@
         tableData: [],
         userList:[],
         couponList:[],
+
+        liveList:[],
+        pushMsgObj:{
+          productId:'',
+          productType:'',
+        }
       }
     },
     created(){
         this.getUserList();
         this.getCouponList();
+        this.getLiveList();
     },
     methods:{
+      sendMessageToLiveUser(){
+        if(!this.pushMsgObj.productId){
+          this.$errorMessage('请选择推送的课程')
+          return;
+        }
+        for(let i=0;i<this.liveList.length;i++){
+          if(this.pushMsgObj.productId == this.liveList[i].productId){
+            this.pushMsgObj.productType = this.liveList[i].imageType
+          }
+        }
+        this.http.post('/orgProduct/liveProductInform',this.pushMsgObj).then(res=>{
+          this.$successMessage('已推送')
+          this.messageFlag = false;
+        })
+      },
+      //获取直播课列表
+      getLiveList(){
+        this.http.post('/orgProduct/queryOnlineProductList',{orgId:4,pageSize:1000}).then(res=>{
+          if(res.code == 0){
+            this.liveList = res.data.list;
+          }
+        })
+      },
       getUserList(){
         this.http.post('/orgInfo/queryAppUser',{}).then(res=>{
           if(res.code == 0){

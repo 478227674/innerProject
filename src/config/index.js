@@ -9,8 +9,8 @@ if(process.env.NODE_ENV == 'production'){  //生产环境
   url.baseUrl = 'http://qk.taiqiedu.com/tqshoop/org';//打包后测试地址
   url.wxUrl = 'http://qk.taiqiedu.com/h5/';
 }else{ //测试环境
-  // url.baseUrl = 'http://192.168.83.108:8080';//测试地址
-  url.baseUrl = 'http://qk.taiqiedu.com/tqshoop/org';//打包后测试地址
+  url.baseUrl = 'http://192.168.1.209:8085/tqky_war_exploded/org';//测试地址
+  // url.baseUrl = 'http://qk.taiqiedu.com/tqshoop/org';//打包后测试地址
   url.wxUrl = 'http://qk.taiqiedu.com/h5/';
 
   // url.baseUrl = 'http://192.168.83.105 :8080';//测试地址

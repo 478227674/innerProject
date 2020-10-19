@@ -3,11 +3,11 @@
   <div>
     <!--查看课时-->
     <el-dialog title="课程课时" width="80%" :visible.sync="seeClassFlag">
-      <el-button @click="addClassFlag = true" style="float: left;margin-bottom: 10px;" icon="el-icon-circle-plus-outline">
-        新增课时
-      </el-button>
+      <!--      <el-button @click="addClassFlag = true" style="float: left;margin-bottom: 10px;" icon="el-icon-circle-plus-outline">-->
+      <!--        新增课时-->
+      <!--      </el-button>-->
       <el-button @click="copyFlag = true" style="float: left;margin-bottom: 10px;" icon="el-icon-circle-plus-outline">
-        复制到其他课程
+        复制到其他阶段
       </el-button>
       <el-button @click="deleteVideos" style="float: left;margin-bottom: 10px;" icon="el-icon-delete">
         下架课时
@@ -57,18 +57,18 @@
             <span v-show="scope.row.onLine == 1">是</span>
           </template>
         </el-table-column>
-        <el-table-column
-          fixed="right"
-          label="操作"
-          type="index"
-          align="center"
-          width="300"
-        >
-          <template slot-scope="scope">
-            <el-button v-show="scope.row.lineVideoUrl" @click="seeVideo(scope.row)" type="info" size="mini">试看视频</el-button>
-            <el-button @click="updateKeshi(scope.row)" type="info" size="mini">编辑</el-button>
-          </template>
-        </el-table-column>
+<!--        <el-table-column-->
+<!--          fixed="right"-->
+<!--          label="操作"-->
+<!--          type="index"-->
+<!--          align="center"-->
+<!--          width="300"-->
+<!--        >-->
+<!--          <template slot-scope="scope">-->
+<!--            <el-button v-show="scope.row.lineVideoUrl" @click="seeVideo(scope.row)" type="info" size="mini">试看视频</el-button>-->
+<!--            <el-button @click="updateKeshi(scope.row)" type="info" size="mini">编辑</el-button>-->
+<!--          </template>-->
+<!--        </el-table-column>-->
       </el-table>
       <el-pagination
         @current-change="khandleCurrentChange"
@@ -80,167 +80,11 @@
         <el-button @click="seeClassFlag = false">取 消</el-button>
       </div>
     </el-dialog>
-    <!--添加课时-->
-    <el-dialog title="新增课时" width="80%" :visible.sync="addClassFlag">
-      <el-form :model="keshiObj">
-        <el-form-item
-          :label-width="formLabelWidth"
-          label="课时标题"
-        >
-          <el-input  v-model.string="keshiObj.videoName" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="课时类别" :label-width="formLabelWidth">
-          <template>
-            <el-radio v-model="keshiObj.onLive" label="1" >直播</el-radio>
-            <el-radio v-model="keshiObj.onLive" label="0" >非直播</el-radio>
-          </template>
-        </el-form-item>
-        <el-form-item
-          :label-width="formLabelWidth"
-          label="视频ID"
-          v-show="keshiObj.onLive==0"
-        >
-          <el-input  v-model.string="keshiObj.lineVideoUrl" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item
-          :label-width="formLabelWidth"
-          label="起始时间"
-          prop="pushTitle"
-          v-show="keshiObj.onLive==1"
 
-        >
-          <el-date-picker
-            v-model="seTime"
-            type="datetimerange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="所属学科" :label-width="formLabelWidth">
-          <el-select v-model="keshiObj.subjectId" placeholder="请选择">
-            <el-option
-              v-for="item in keshiSubjectList"
-              :key="item.subjectId"
-              :label="item.subjectName"
-              :value="item.subjectId">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="所属阶段" :label-width="formLabelWidth">
-          <el-select v-model="keshiObj.stageId" placeholder="请选择">
-            <el-option
-              v-for="item in stageListData"
-              :key="item.stageId"
-              :label="item.stageName"
-              :value="item.stageId">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="是否试听" :label-width="formLabelWidth">
-          <template>
-            <el-radio v-model="keshiObj.isTry" label="1" >是</el-radio>
-            <el-radio v-model="keshiObj.isTry" label="0" >否</el-radio>
-          </template>
-        </el-form-item>
-        <el-form-item
-          :label-width="formLabelWidth"
-          label="排序"
-        >
-          <el-input  v-model.string="keshiObj.sort" auto-complete="off"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="addClassFlag = false">取 消</el-button>
-        <el-button type="primary" @click="submitAddKeshi">确 定</el-button>
-      </div>
-    </el-dialog>
-    <!--编辑课时-->
-    <el-dialog title="编辑课时" width="80%" :visible.sync="editUpdateFlag">
-      <el-form :model="editKeshiObj">
-        <el-form-item
-          :label-width="formLabelWidth"
-          label="课时标题"
-          prop="pushTitle"
-        >
-          <el-input  v-model.string="editKeshiObj.videoName" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="课时类别" :label-width="formLabelWidth">
-          <template>
-            <el-radio v-model="editKeshiObj.onLive" label="1" >直播</el-radio>
-            <el-radio v-model="editKeshiObj.onLive" label="0" >非直播</el-radio>
-          </template>
-        </el-form-item>
-        <el-form-item
-          :label-width="formLabelWidth"
-          label="视频ID"
-          v-show="editKeshiObj.onLive==0"
-        >
-          <el-input  v-model.string="editKeshiObj.lineVideoUrl" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item
-          :label-width="formLabelWidth"
-          label="起始时间"
-          prop="pushTitle"
-          v-show="editKeshiObj.onLive==1"
-        >
-          <el-date-picker
-            v-model="seTime"
-            type="datetimerange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期">
-          </el-date-picker>
-        </el-form-item>
-
-        <el-form-item label="所属学科" :label-width="formLabelWidth">
-          <el-select v-model="editKeshiObj.subjectId" placeholder="请选择">
-            <el-option
-              v-for="item in keshiSubjectList"
-              :key="item.subjectId"
-              :label="item.subjectName"
-              :value="item.subjectId">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="所属阶段" :label-width="formLabelWidth">
-          <el-select v-model="editKeshiObj.stageId" placeholder="请选择">
-            <el-option
-              v-for="item in stageListData"
-              :key="item.stageId"
-              :label="item.stageName"
-              :value="item.stageId">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="是否试听" :label-width="formLabelWidth">
-          <template>
-            <el-radio v-model="editKeshiObj.isTry" label="1" >是</el-radio>
-            <el-radio v-model="editKeshiObj.isTry" label="0" >否</el-radio>
-          </template>
-        </el-form-item>
-        <el-form-item
-          :label-width="formLabelWidth"
-          label="排序"
-        >
-          <el-input  v-model.string="editKeshiObj.sort" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="是否上线" :label-width="formLabelWidth">
-          <template>
-            <el-radio v-model="editKeshiObj.onLine" label="1" >是</el-radio>
-            <el-radio v-model="editKeshiObj.onLine" label="0" >否</el-radio>
-          </template>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="editUpdateFlag = false">取 消</el-button>
-        <el-button type="primary" @click="submitEditKeshi">确 定</el-button>
-      </div>
-    </el-dialog>
     <!--查看阶段-->
     <el-dialog title="课程阶段" width="80%" :visible.sync="stageFlag">
       <el-button @click="addStageFlag = true" style="float: left;margin-bottom: 10px;" icon="el-icon-circle-plus-outline">
-        新增阶段
+        关联阶段
       </el-button>
       <div style="clear: both"></div>
       <div>
@@ -271,7 +115,7 @@
           width="300"
         >
           <template slot-scope="scope">
-            <el-button type="danger" @click="deleteStage(scope.row)" size="mini">删除</el-button>
+            <el-button type="danger" @click="deleteStage(scope.row)" size="mini">移除</el-button>
             <el-button @click="editStage(scope)" type="info" size="mini">编辑</el-button>
             <el-button @click="seeKeshi(scope)" type="info" size="mini">查看课时</el-button>
           </template>
@@ -283,17 +127,20 @@
       </div>
     </el-dialog>
     <!--添加阶段-->
-    <el-dialog title="新增阶段" width="80%" :visible.sync="addStageFlag">
-      <el-form :model="keshiObj">
-        <el-form-item
-          :label-width="formLabelWidth"
-          label="阶段标题"
-        >
-          <el-input  v-model.string="stageobj.stageName" auto-complete="off"></el-input>
+    <el-dialog title="关联阶段" width="80%" :visible.sync="addStageFlag">
+      <el-form :model="stageobj">
+        <el-form-item label="关联阶段" :label-width="formLabelWidth">
+          <el-select multiple filterable v-model="stageobj.stageIds" placeholder="请选择">
+            <el-option
+              v-for="item in stageListData"
+              :key="item.stageId"
+              :label="item.stageName"
+              :value="item.stageId">
+            </el-option>
+          </el-select>
         </el-form-item>
-
-
       </el-form>
+
       <div slot="footer" class="dialog-footer">
         <el-button @click="addStageFlag = false">取 消</el-button>
         <el-button type="primary" @click="submitAddStage">确 定</el-button>
@@ -301,7 +148,7 @@
     </el-dialog>
     <!--编辑阶段-->
     <el-dialog title="编辑阶段" width="80%" :visible.sync="editStageFlag">
-      <el-form :model="keshiObj">
+      <el-form :model="editstageobj">
         <el-form-item
           :label-width="formLabelWidth"
           label="阶段标题"
@@ -309,11 +156,17 @@
           <el-input  v-model.string="editstageobj.stageName" auto-complete="off"></el-input>
         </el-form-item>
 
-
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="editStageFlag = false">取 消</el-button>
         <el-button type="primary" @click="submitEditStage">确 定</el-button>
+      </div>
+    </el-dialog>
+    <!--试看视频-->
+    <el-dialog title="查看视频" width="80%" :visible.sync="seeVideoFlag">
+      <video style="width:80%;margin:20px auto;display: block;"  controls="controls" :src="videoUrl"></video>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="seeVideoFlag = false">取 消</el-button>
       </div>
     </el-dialog>
     <!--复制课时弹层-->
@@ -322,14 +175,14 @@
         <el-form :model="copyobj">
           <el-form-item
             :label-width="formLabelWidth"
-            label="选择课程"
+            label="选择阶段"
           >
-            <el-select @change="currentSel" value-key="createTime" v-model="copyobj.cpProductId" filterable placeholder="请选择">
+            <el-select v-model="copyobj.cpStageId" filterable placeholder="请选择">
               <el-option
-                v-for="item in copyAllList"
-                :key="item.createTime"
-                :label="item.productName"
-                :value="item">
+                v-for="item in copyStageList"
+                :key="item.stageId"
+                :label="item.stageName"
+                :value="item.stageId">
               </el-option>
             </el-select>
           </el-form-item>
@@ -355,7 +208,6 @@
     data(){
       return{
         formLabelWidth:'120px',
-
         flag:false,
         seeId:null,//当前查看的课时的课程ID
         seeType:null,//当前查看的课时的课程ID
@@ -364,32 +216,22 @@
         kpagenum:1,
         ktotal:0,
         keshiList:[],
-        keshiObj:{
-          sort:9999,
-          stageId:null,
-          subjectId:null,
-          productId:'',
-          videoName:'',
-          longStartTime:'',
-          longEndTime:'',
-          isTry:'0',//是否试听 0否 1是
-          lineVideoUrl:'',//不是直播的话 需要传视频ID
-          onLive:'0',
-        },
         editKeshiObj:{},//编辑课时
         editUpdateFlag:false,//编辑课时控制
         seTime:'',
         subjectList:[],
         subjectList1:[],
         keshiSubjectList:[],
-
+        copyobj:{
+          productVideoIds:[],
+          cpStageId:null,
+        },
         stageFlag:false,
         addStageFlag:false,
         stageobj:{
           productId:'',
           productType:'',
-          stageName:'',
-          subjectId:'',
+          stageIds:[],
         },
         stageList:[],
         stagenum:1,
@@ -402,7 +244,8 @@
           stageName:'',
           subjectId:'',
         },
-
+        copyAllList:[],
+        copyFlag:false,
         stageListData:[],//专门添加课时时用的
         stageSubjectList:[], //课程的学科列表
         stageSubId:null, //当前查看的学科id
@@ -410,32 +253,20 @@
 
         seeVideoFlag:false,
         videoUrl:'',
-
-        copyList:[], //复制列表
-        copyFlag:false,//符合弹层
-        copyobj:{
-          cpProductId:'',
-          cpProductType:'',
-          productVideoIds:[],
-          cpStageId:null,
-
-        },
-        copyAllList:[],
-        chooseProduct:{},
-
-
+        sortList:[],
         copyStageList:[],
-        isCopyToStage:'0'
       }
     },
     created(){
-      this.monitoring();
-      //获取所有的复制对象课程
-      this.http.post('/orgProduct/getAllProductList',{}).then(res=>{
+      // //获取项目
+      this.http.post('/orgProduct/queryThreeSortList',{}).then(res=>{
         if(res.code == 0){
-          this.copyAllList = res.data ;
+          this.sortList = res.data;
         }
       })
+      this.monitoring();
+      //获取所有的阶段
+      this.getCopyStageList();
     },
     methods:{
       monitoring(){
@@ -490,12 +321,10 @@
         for(var i=0;i<this.copyList.length;i++){
           arr.push(this.copyList[i].videoId)
         }
-        this.copyobj.cpProductType = this.chooseProduct.imageType;
-        this.copyobj.cpProductId = this.chooseProduct.productId;
         this.copyobj.productVideoIds = arr;
         this.http.post('/orgProduct/copyProductVideo',this.copyobj).then(res=>{
           if(res.code == 0){
-            this.$successMessage('复制成功')
+            this.$successMessage('复制成功');
             this.copyFlag = false;
             this.copyList = [];
             this.$refs.multipleTable.clearSelection();
@@ -529,10 +358,17 @@
       //根据学科ID获取阶段列表
       getStageBySubjectId(id){
         this.stageSubId =id;
-        this.http.post('/orgProduct/queryProductStageList',{productId:this.stageobj.productId,productType:this.seeType,pageNum:this.stagenum,pageSize:100,subjectId:this.stageSubId}).then(res=>{
+        this.http.post('/orgProduct/queryStagePageByProduct',{productId:this.stageobj.productId,productType:this.seeType,pageNum:this.stagenum,pageSize:100,subjectId:this.stageSubId}).then(res=>{
           if(res.code == 0){
             this.stageList = res.data.list;
             this.stagetotal = res.data.total;
+          }
+        })
+      },
+      getCopyStageList(){
+        this.http.post('/orgProduct/queryStageList',{pageNum:1,pageSize:9999}).then(res=>{
+          if(res.code == 0){
+            this.copyStageList = res.data.list;
           }
         })
       },
@@ -625,7 +461,7 @@
         this.kpagenum = 1;
         this.stageobj.productId = data.productId;
         this.getStageSubjectList();
-        this.http.post('/orgProduct/queryProductStageList',{productId:data.productId,productType:this.seeType,pageNum:1,pageSize:100}).then(res=>{
+        this.http.post('/orgProduct/queryProductStageListSearch',{sortId:data.sortId,pageNum:1,pageSize:1000}).then(res=>{
           if(res.code == 0){
             this.stageListData = res.data.list;
           }
@@ -640,13 +476,20 @@
       //新增阶段
       submitAddStage(){
         this.stageobj.productType = this.seeType;
-        this.http.post('/orgProduct/saveProductStage',this.stageobj).then(res=>{
+        this.http.post('/orgProduct/saveProductStageRelation',this.stageobj).then(res=>{
           if(res.code == 0){
-            this.$successMessage('添加成功')
+            this.$successMessage('关联成功')
             this.getProductStage();
             this.addStageFlag = false;
           }
         })
+        // this.http.post('/orgProduct/saveProductStage',this.stageobj).then(res=>{
+        //   if(res.code == 0){
+        //     this.$successMessage('添加成功')
+        //     this.getProductStage();
+        //     this.addStageFlag = false;
+        //   }
+        // })
       },
       //编辑阶段
       submitEditStage(){
@@ -659,31 +502,28 @@
         })
       },
       editStage(data){
-        this.editstageobj.productId = data.row.productId;
-        this.editstageobj.subjectId = data.row.subjectId;
+        this.editstageobj.sortId = 4;
         this.editstageobj.stageName = data.row.stageName;
         this.editstageobj.stageId = data.row.stageId;
         this.editStageFlag = true;
       },
       //获取阶段
       getProductStage(){
-        this.http.post('/orgProduct/queryProductStageList',{productId:this.stageobj.productId,productType:this.seeType,pageNum:this.stagenum,pageSize:100,subjectId:this.stageSubId}).then(res=>{
+        this.http.post('/orgProduct/queryStagePageByProduct',{productId:this.stageobj.productId,productType:this.seeType,pageNum:this.stagenum,pageSize:100,subjectId:this.stageSubId}).then(res=>{
           if(res.code == 0){
             this.stageList = res.data.list;
             this.stagetotal = res.data.total;
-            this.stageListData = res.data.list; //添加完新阶段后要重新给添加课时时所用的所属阶段列表重新赋值
-
           }
         })
       },
       //删除阶段
       deleteStage(data){
-        this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
+        this.$confirm('确定解除此阶段与课程的关联吗?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(async() => {
-          await this.deleteStageFn(data.stageId);
+          await this.deleteStageFn(data.stageId,data.productId,data.productType);
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -691,19 +531,14 @@
           });
         });
       },
-      deleteStageFn(id){
-        this.http.post('/orgProduct/deleteProductStage',{stageId:id}).then(res=>{
+      deleteStageFn(id,pid,ptype){
+        this.http.post('/orgProduct/deleteProductStageRelation',{stageId:id,productId:pid,productType:ptype}).then(res=>{
           if(res.code == 0){
             this.$successMessage('已删除')
             this.getProductStage();
           }
         })
       },
-
-
-
-
-
       //查看课时
       seeProductClass(data){
         this.onLive = data.row.onLive;
@@ -711,7 +546,7 @@
         this.seeId = data.row.productId;
         this.seeClassFlag = true;
         this.getProductClassKeshiList();
-        this.http.post('/orgProduct/queryProductStageList',{productId:data.row.productId,productType:this.seeType,pageNum:1,pageSize:10}).then(res=>{
+        this.http.post('/orgProduct/queryStagePageByProduct',{productId:data.row.productId,productType:this.seeType,pageNum:1,pageSize:10}).then(res=>{
           if(res.code == 0){
             this.stageList = res.data.list;
           }
@@ -725,7 +560,7 @@
       },
       //获取课程课时猎表
       getProductClassKeshiList(){
-        this.http.post('/orgProduct/queryProductVideoList',{productType:this.seeType,productId:this.seeId,stageId:this.seeStageId,pageNum:this.kpagenum,pageSize:10}).then(res=>{
+        this.http.post('/orgProduct/queryProductVideoList',{stageId:this.seeStageId,pageNum:this.kpagenum,pageSize:10}).then(res=>{
           if(res.code == 0){
             this.ktotal = res.data.total;
             this.keshiList = res.data.list;

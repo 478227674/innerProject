@@ -3,7 +3,7 @@ import axios from 'axios';
 
 //webpack 环境变量，构建时自动替换现网动态请求域名前缀
 axios.defaults.baseURL = process.env.dynamicDomain;
-axios.defaults.timeout =  6000;
+axios.defaults.timeout =  60000;
 export default {
   get: function (url, data) {
     return new Promise(function (resolve, reject) {

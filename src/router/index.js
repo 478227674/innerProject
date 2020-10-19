@@ -140,7 +140,11 @@ export default new Router({
             component: resolve =>require(['@/components/menu/grouporder/refundgrouporder'], resolve),
             name:'拼团退款列表'
           },
-
+          {
+            path: 'videos',
+            component: resolve => require(['@/components/menu/videos/videos'], resolve),
+            name: '阶段管理'
+          },
       ]
     }
   ]

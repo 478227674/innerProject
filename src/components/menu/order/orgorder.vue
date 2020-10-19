@@ -11,6 +11,11 @@
             align="center">
           </el-table-column>
           <el-table-column
+            prop="userPhone"
+            label="电话"
+            align="center">
+          </el-table-column>
+          <el-table-column
             prop="productName"
             label="课程名称"
             align="center">
@@ -56,7 +61,7 @@
         </el-pagination>
 
       </el-tab-pane>
-      <el-tab-pane label="查询订单" name="third">
+      <el-tab-pane label="销售订单" name="third">
 
         <el-table
           :data="payList"
@@ -64,6 +69,11 @@
           <el-table-column
             prop="userName"
             label="学员"
+            align="center">
+          </el-table-column>
+          <el-table-column
+            prop="userPhone"
+            label="电话"
             align="center">
           </el-table-column>
           <el-table-column
@@ -111,9 +121,9 @@
           :total="total1">
         </el-pagination>
       </el-tab-pane>
-      <el-tab-pane label="销售订单" name="second">
+      <el-tab-pane label="查询订单" name="second">
         <div style="margin-bottom: 10px;">
-          <el-select v-model="searchForm.productId" placeholder="请选择">
+          <el-select v-model="searchForm.createTime" placeholder="请选择">
             <el-option
               :key="null"
               label="请选择"
@@ -142,6 +152,11 @@
           <el-table-column
             prop="userName"
             label="学员"
+            align="center">
+          </el-table-column>
+          <el-table-column
+            prop="userPhone"
+            label="电话"
             align="center">
           </el-table-column>
           <el-table-column

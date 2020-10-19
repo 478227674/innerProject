@@ -10,7 +10,7 @@ var token = localStorage.getItem('userinfo') ? JSON.parse(localStorage.getItem('
 console.log(token)
 var service = axios.create({
   baseURL: configUrl.baseUrl,
-  timeout: 5000,
+  timeout: 50000,
   withCredentials:false,
   headers: {
     'content-type': 'application/json',

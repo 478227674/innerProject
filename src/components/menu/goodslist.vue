@@ -1,8 +1,14 @@
 <template>
   <div>
-    <el-button @click="addProductFn" style="float: left;margin-bottom: 10px;" icon="el-icon-circle-plus-outline">
-      添加课程
-    </el-button>
+    <div>
+      <el-button @click="addProductFn" style="margin-bottom: 10px;" icon="el-icon-circle-plus-outline">
+        添加课程
+      </el-button>
+    </div>
+    <div style="margin-bottom: 10px;">
+      <el-input style="width: 200px;" placeholder="输入课程名称搜索" v-model.string="keyWord" auto-complete="off"></el-input>
+      <el-button @click="searchProductByType()" type="primary" style="margin-left: 10px;">搜索</el-button>
+    </div>
     <el-table
       :data="tableData"
       style="width: 100%">
@@ -156,7 +162,6 @@
         </el-form-item>
         <el-form-item label="封面" :label-width="formLabelWidth">
           <el-upload
-
             class="avatar-uploader"
             action="apiurl"
             :show-file-list="false"
@@ -168,7 +173,6 @@
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
-
         <el-form-item label="轮播图(最多4张)" :label-width="formLabelWidth">
           <el-upload
             action="apiurl"
@@ -367,7 +371,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="所属学科" :label-width="formLabelWidth">
-          <el-select v-model="editForm.subjectIds" @change="selectChange" multiple placeholder="请选择">
+          <el-select v-model="editForm.productSale.subjectIds" @change="selectChange" multiple placeholder="请选择">
             <el-option
               v-for="item in subjectList1"
               :key="item.subjectId"
@@ -576,7 +580,6 @@
       </div>
     </el-dialog>
     <videos ref="child" v-show="seeClassFlag"></videos>
-
   </div>
 </template>
 
@@ -606,6 +609,7 @@
   export default {
     data() {
       return {
+        keyWord:'',
         authList:[],
         editorOption: {
           theme: "snow",
@@ -690,7 +694,9 @@
           is_discount:'',
           onLive:true,
           memberIds:[],
-          subjectIds:[],
+          productSale:{
+            subjectIds:[],
+          },
           productName: '',
           productDesc:'',
           productImage:'',
@@ -744,12 +750,17 @@
       this.apiurl = this.uplodUrl + '/file/upload';
       this.form.orgId = JSON.parse(localStorage.getItem('userinfo')).id;
       //
-      this.getGoodsList(1,this.pagesize);
+      this.getGoodsList();
       this.getGuiGeList();
       this.getClassTypeList();
       this.initPageData();
     },
     methods:{
+      //搜索产品
+      searchProductByType(){
+
+        this.getGoodsList();
+      },
       initPageData(){
         this.http.post('/orgInfo/queryMemberLevelPageList',{}).then(res=>{
           if(res.code == 0){
@@ -790,12 +801,15 @@
           }
         })
       },
-
       dealDisabledDate (time) {
         return time.getTime() < Date.now()
       },
-      getGoodsList(num,size){
-        this.http.post('/orgProduct/queryProductList',{orgId:this.orgId,pageNum:num,pageSize:size}).then(res=>{
+      getGoodsList(){
+        var obj = {orgId:this.orgId,pageNum:this.pagenum,pageSize:10}
+        if(this.keyWord){
+          obj.productName = this.keyWord;
+        }
+        this.http.post('/orgProduct/queryProductList',obj).then(res=>{
           if(res.code == 0){
             for(var i=0;i<res.data.list.length;i++){
                 res.data.list[i].endTime = this.formatTimeToDay(res.data.list[i].endTime)
@@ -883,12 +897,12 @@
       },
       handleSizeChange(val) {
         //${val} 是当前每页多少条
-        this.getGoodsList(this.pagenum,val);
+        this.getGoodsList();
       },
       handleCurrentChange(val) {
         //切换页码 ${val} 是页码数 请求数据即可
         this.pagenum = val;
-        this.getGoodsList(val,this.pagesize);
+        this.getGoodsList();
       },
       //图片上传
       uploadImg(data,type){
@@ -1011,7 +1025,7 @@
             this.getClassTypeList();
             this.getGuiGeList();
             this.dialogFormVisible = false;
-            this.getGoodsList(this.pagenum,this.pagesize);
+            this.getGoodsList();
           }
         })
       },
@@ -1085,7 +1099,7 @@
           if(res.code == 0){
             this.$successMessage('修改成功')
             this.dialogEditVisible = false;
-            this.getGoodsList(this.pagenum,this.pagesize);
+            this.getGoodsList();
 
           }
         })
@@ -1134,7 +1148,7 @@
             var memberIds = res.data.productSale.memberIds || [];
             var subjectIds = JSON.parse(res.data.productSale.subjectIds) || [];
             _this.editForm.memberIds = memberIds
-            _this.editForm.subjectIds = subjectIds
+            _this.editForm.productSale.subjectIds = subjectIds
           }
         })
 
