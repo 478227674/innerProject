@@ -9,14 +9,11 @@
       <el-table-column
         prop="date"
         label="日期"
-              sortable
-        width="180"
         align="center">
       </el-table-column>
       <el-table-column
         prop="name"
         label="姓名"
-        width="180"
         align="center">
       </el-table-column>
       <el-table-column
@@ -36,9 +33,7 @@
       <el-table-column
         fixed="right"
         label="操作"
-        type="index"
-        align="center"
-        width="100">
+        align="center">
         <template slot-scope="scope">
           <el-button @click="handleClick(scope)" type="text" size="small">推荐</el-button>
         </template>

@@ -10,7 +10,6 @@
       <el-input style="width: 200px;" placeholder="输入课程名称搜索" v-model.string="keyWord" auto-complete="off"></el-input>
       <el-button @click="searchProductByType()" type="primary" style="margin-left: 10px;">搜索</el-button>
     </div>
-
     <el-table
       :data="tableData"
       style="width: 100%">
@@ -125,7 +124,6 @@
         >
           <el-input v-model.string="form.productName" auto-complete="off"></el-input>
         </el-form-item>
-
         <el-form-item
           label="课程所属项目"
           :label-width="formLabelWidth"
@@ -181,7 +179,6 @@
             </el-option>
           </el-select>
         </el-form-item>
-
         <el-form-item
           label="课程简单描述"
           :label-width="formLabelWidth"
@@ -265,7 +262,6 @@
           <el-input oninput="value=value.replace(/[^\d.]/g,'')" v-model.string="form.productPrice"
                     auto-complete="off"></el-input>
         </el-form-item>
-
         <!--砍价参数-->
         <el-form-item
           label="可砍去金额"
@@ -285,7 +281,6 @@
           <el-input oninput="value=value.replace(/[^\d.]/g,'')" v-model.string="form.cutNum"
                     auto-complete="off"></el-input>
         </el-form-item>
-
         <el-form-item
           label="优惠活动结束日期"
           :label-width="formLabelWidth"
@@ -302,7 +297,6 @@
           >
           </el-date-picker>
         </el-form-item>
-
         <!--拼团参数-->
         <el-form-item
           label="拼团设置"
@@ -436,13 +430,11 @@
           </el-switch>
         </el-form-item>
       </el-form>
-
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="submitData">确 定</el-button>
       </div>
     </el-dialog>
-
     <!--dialog编辑-->
     <el-dialog title="编辑课程" width="75%" :visible.sync="dialogEditVisible">
       <el-form :model="editForm">
@@ -599,6 +591,18 @@
         >
           <el-input v-model.string="editForm.coinLimit" auto-complete="off"></el-input>
         </el-form-item>
+
+        <el-form-item
+          label="是否上架"
+          :label-width="formLabelWidth"
+          prop="isShelves"
+        >
+          <el-switch
+            v-model="editForm.isShelves"
+            active-color="#13ce66"
+            inactive-color="#dcdfe6">
+          </el-switch>
+        </el-form-item>
       </el-form>
 
       <div slot="footer" class="dialog-footer">
@@ -667,7 +671,6 @@
         <el-button @click="groupFlag = false">确定</el-button>
       </div>
     </el-dialog>
-
     <videos ref="child" v-show="seeClassFlag"></videos>
 
   </div>
@@ -764,6 +767,7 @@
           alClassId: '',
         },//添加课程
         editForm: {
+          isShelves:'',
           alSaleId: null,
           onLive: null,
           memberIds: [],
@@ -1245,16 +1249,17 @@
             this.$errorMessage('请至少添加一种拼团规格');
             return;
           }
-          let numFlag = false;
-          for (var i = 0; i < this.groupList.length; i++) {
-            if (this.groupList[i].groupSumNum == 2) {
-              numFlag = true;
-            }
-          }
-          if (!numFlag) {
-            this.$errorMessage('拼团规格最少需要一个2人团')
-            return;
-          }
+          //判断必须有一个2人团 暂时不要
+          // let numFlag = false;
+          // for (var i = 0; i < this.groupList.length; i++) {
+          //   if (this.groupList[i].groupSumNum == 2) {
+          //     numFlag = true;
+          //   }
+          // }
+          // if (!numFlag) {
+          //   this.$errorMessage('拼团规格最少需要一个2人团')
+          //   return;
+          // }
           this.form.groups = this.groupList;
         }
         if (this.form.isCoin == 1) {
@@ -1324,6 +1329,11 @@
           this.$errorMessage('请填写浏览人数')
           return;
         }
+        if(this.editForm.isShelves){
+          this.editForm.isShelves = 1;
+        }else{
+          this.editForm.isShelves = 0;
+        }
         this.http.post('/activity/updateActivityInfo', this.editForm).then(res => {
           if (res.code == 0) {
             this.dialogEditVisible = false;
@@ -1356,6 +1366,8 @@
             this.editForm.coinLimit = res.data.productList.coinLimit;
             this.editForm.imgList = [];
             this.editForm.imageList = [];
+            this.editForm.isShelves = res.data.isShelves == 0 ? false : true;
+
             for (var i = 0; i < res.data.imageList.length; i++) {
               this.editForm.imgList.push(res.data.imageList[i].attachment.fileUrl) //显示列表
               this.editForm.imageList.push({ //post给后台的数组
@@ -1387,10 +1399,6 @@
         }).then(async () => {
           await this.deleteGoods(data.row.productAid, data.$index);
         }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
         });
       },
       deleteGoods(id, index) {

@@ -209,9 +209,7 @@
         formLabelWidth: '120px',
         options:[],
         value:'',
-        tableData: [
-
-        ],
+        tableData: [],
         moneytotal:0,
         goodsList:[],
         pagenum:1,
@@ -222,8 +220,6 @@
           orgId:''
         },
         zzbTotal:0,
-
-
         chongzhiList:[],
         cpagenum:1,
         cpagesize:10,

@@ -1165,10 +1165,7 @@
         }).then(async() => {
             await this.deleteGoods(data.row.productId,data.$index);
         }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
+
         });
       },
       deleteGoods(id,index){

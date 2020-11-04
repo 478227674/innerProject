@@ -123,7 +123,7 @@
       </el-tab-pane>
       <el-tab-pane label="查询订单" name="second">
         <div style="margin-bottom: 10px;">
-          <el-select v-model="searchForm.createTime" placeholder="请选择">
+          <el-select v-model="searchForm.createTime" filterable placeholder="请选择">
             <el-option
               :key="null"
               label="请选择"
@@ -144,7 +144,7 @@
             end-placeholder="结束日期">
           </el-date-picker>
           <el-button @click="searchStudent" type="primary">搜索</el-button>
-
+          <el-button @click="uploadExcle" type="primary">导出excle</el-button>
         </div>
         <el-table
           :data="allList"
@@ -205,17 +205,56 @@
         </el-pagination>
       </el-tab-pane>
     </el-tabs>
+    <el-dialog :title="productName + '订单导出'" width="81%" :visible.sync="getFlag">
+      <div style="display: flex;justify-content: space-around">
+        <el-button @click="getAllDataToExcl('#searchtable')" style="float: left;margin-bottom: 10px;" icon="el-icon-download">
+          导出数据
+        </el-button>
+      </div>
+      <el-table
+        id="searchtable"
+        :data="searchList"
+        style="width: 100%">
+        <el-table-column
+          label="姓名"
+          prop="realName"
+          align="center">
+        </el-table-column>
+        <el-table-column
+          label="电话"
+          prop="userPhone"
+          align="center">
+        </el-table-column>
+        <el-table-column
+          label="地址"
+          prop="address"
+          align="center">
+        </el-table-column>
+        <el-table-column
+          label="金额"
+          prop="payPrice"
+          align="center">
+        </el-table-column>
+      </el-table>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="getFlag = false">取 消</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
-
+  import XLSX from "xlsx";
+  import FileSaver from "file-saver";
   import 'quill/dist/quill.core.css';
   import 'quill/dist/quill.snow.css';
   import 'quill/dist/quill.bubble.css';
   export default {
     data() {
       return {
+        searchList:[],
+        getFlag:false,
         activeName:'first',
         freeList:[],
         payList:[],
@@ -235,7 +274,8 @@
         },
         setTime:'',
         searchChoose:[],
-        choosedobj:''
+        choosedobj:'',
+        productName:'',
       }
     },
     created(){
@@ -245,6 +285,49 @@
       this.getSearchProductList();
     },
     methods:{
+      //导出excel表格
+      uploadExcle(){
+        var id,type;
+        for(var i=0;i<this.searchChoose.length;i++){
+          if(this.searchForm.createTime == this.searchChoose[i].createTime){
+            this.productName = this.searchChoose[i].productName;
+            id = this.searchChoose[i].productId;
+            type = this.searchChoose[i].imageType;
+          }
+        }
+        this.http.post('/orgInfo/dowunLoadExcelProduct',{productId:id,productType:type}).then(res=>{
+          if(res.code == 0){
+            this.searchList = res.data;
+            this.getFlag = true;
+          }
+        })
+      },
+      //导出数据
+      getAllDataToExcl(id){
+        this.$nextTick(function () {
+          var xlsxParam = { raw: true };
+          var wb = XLSX.utils.table_to_book(document.querySelector(id),xlsxParam);//mytable为表格的id名
+          /* get binary string as output */
+          var wbout = XLSX.write(wb, {
+            bookType: "xlsx",
+            bookSST: true,
+            type: "array"
+          });
+          try {
+            FileSaver.saveAs(
+              new Blob([wbout], { type: "application/octet-stream" }),
+              this.productName + '订单表格.xlsx' //导出的表格名称
+            );
+            this.searchList = [];
+            this.getFlag = false;
+          } catch (e) {
+            if (typeof console !== "undefined") console.log(e, wbout);
+          }
+          return wbout;
+        })
+
+      },
+
       getChooseProduct(data){
           this.choosedobj = data;
       },
@@ -267,7 +350,7 @@
         for(var i=0;i<this.searchChoose.length;i++){
           if(this.searchForm.createTime == this.searchChoose[i].createTime){
               this.searchForm.productId = this.searchChoose[i].productId;
-              this.searchForm.productType = this.searchChoose[i].productType;
+              this.searchForm.productType = this.searchChoose[i].imageType;
             }
         }
         this.getList2();
