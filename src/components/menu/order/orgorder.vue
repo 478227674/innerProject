@@ -229,6 +229,9 @@
           label="地址"
           prop="address"
           align="center">
+          <template slot-scope="scope">
+            {{scope.row.subAddress}} {{scope.row.address}}
+          </template>
         </el-table-column>
         <el-table-column
           label="金额"
@@ -332,7 +335,7 @@
           this.choosedobj = data;
       },
       getSearchProductList(){
-        this.http.post('/orgProduct/queryProductList',{orgId:this.orgId,pageNum:1,pageSize:100}).then(res=>{
+        this.http.post('/orgProduct/queryOrgProductListBy4',{orgId:this.orgId,pageNum:1,pageSize:9999}).then(res=>{
           if(res.code == 0){
             this.searchChoose = res.data.list;
           }

@@ -93,7 +93,7 @@
     },
     methods:{
       getGoodsList(){
-        this.http.post('/orgProduct/queryProductList',{orgId:this.orgId,pageNum:1,pageSize:100}).then(res=>{
+        this.http.post('/orgProduct/queryOrgProductListBy4',{orgId:this.orgId,pageNum:1,pageSize:9999}).then(res=>{
           if(res.code == 0){
             this.goodsList = res.data.list;
           }

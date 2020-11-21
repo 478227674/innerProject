@@ -68,28 +68,30 @@
           <img :src="scope.row.attachment.fileUrl" width="100" height="100" class="head_pic"/>
         </template>
       </el-table-column>
-
       <el-table-column
         prop="cTimeStr"
         label="创建时间"
-        width="180"
         align="center">
       </el-table-column>
+      <el-table-column
+        prop="validTimeString"
+        label="有效期"
+        align="center">
+      </el-table-column>
+
       <el-table-column
         label="结束日期"
         align="center">
         <template slot-scope="scope">
-          <span v-if="scope.row.productDetail.isGroup==0">{{scope.row.endTime}}</span>
-          <span v-if="scope.row.productDetail.isGroup==1">{{scope.row.groups[0].sEndTime}}</span>
+          <span v-if="scope.row.productDetail.isCut==1">{{scope.row.endTime}}</span>
+          <span v-if="scope.row.productDetail.isGroup==1">{{scope.row.endTime}}</span>
         </template>
       </el-table-column>
 
       <el-table-column
         fixed="right"
         label="操作"
-        type="index"
-        align="center"
-        width="100">
+        align="center">
         <template slot-scope="scope">
           <el-button @click="handleClick(scope)" type="text" size="small">删除</el-button>
           <el-button @click="editGoods(scope.row)" type="text" size="small">编辑</el-button>
@@ -418,6 +420,23 @@
             </div>
           </template>
         </el-form-item>
+
+        <el-form-item
+          label="课程有效期"
+          :label-width="formLabelWidth"
+          prop="onLive"
+        >
+          <el-date-picker
+            v-model="form.validTime"
+            type="datetime"
+            size="large"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            placeholder="选择课程有效期"
+            :editable="false"
+            :picker-options="pickerOptions"
+          >
+          </el-date-picker>
+        </el-form-item>
         <el-form-item
           label="是否直播"
           :label-width="formLabelWidth"
@@ -560,7 +579,6 @@
           <el-input oninput="value=value.replace(/[^\d.]/g,'')" v-model.string="editForm.commissionRebate"
                     auto-complete="off"></el-input>
         </el-form-item>
-
         <el-form-item
           label="购买次数"
           :label-width="formLabelWidth"
@@ -591,7 +609,6 @@
         >
           <el-input v-model.string="editForm.coinLimit" auto-complete="off"></el-input>
         </el-form-item>
-
         <el-form-item
           label="是否上架"
           :label-width="formLabelWidth"
@@ -736,6 +753,7 @@
         dialogVisible: false,
         orgId: JSON.parse(localStorage.getItem('userinfo')).id,
         form: {
+          validTime:'',//课程有效期
           alSaleId: null,
           onLive: null,
           memberIds: [],
@@ -1278,6 +1296,10 @@
         }
         if (this.form.purchaseNum > 1000) {
           this.$errorMessage('购买次数初始不能大于1000')
+          return;
+        }
+        if(!this.form.validTime){
+          this.$errorMessage('请选择课程有效期')
           return;
         }
         this.form.rules = this.guigeList;
